@@ -1,0 +1,60 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+<div class="header pb-6 d-flex align-items-center" 
+     style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+  <!-- Mask -->
+  <span class="mask bg-gradient-default opacity-8"></span>
+  <!-- Header container -->
+  <div class="container-fluid d-flex align-items-center">
+    <div class="row">
+
+    </div>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-8 order-xl-1">
+      <div class="col-lg-7 col-md-10">
+        <h1 class="text-white"> 
+          فروشگاه ۱۲۳ کیف
+        </h1>
+        <p class="text-white mt-0 mb-5">سامانه رهگیری سفارشات</p>
+      </div>
+      <div class="card">
+        <div class="card-body">
+            <h6 class="heading-small text-muted mb-4">به سامانه رهگیری سفارشات خوش آمدید. برای رهگیری نیاز است کد سفارش + شماره تماس خود را وارد کنید</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-username">کد رهگیری</label>
+                    <input type="text" id="input-username" class="form-control" placeholder="کد سفارش ۵ رقمی .. مانند 84333" value="">
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">شماره تماس</label>
+                    <input type="text" id="input-email" class="form-control" placeholder="شماره تماسی که با آن سفارش خود را ثبت کردید مانند ۰۹۱۲۹۵۸۵۷۱۴">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-info">رهگیری سفارش</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "includes/footer.html" %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}
