@@ -17,6 +17,12 @@ def index(request):
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
+@login_required
+def upload_excel_file(request):
+    context = {'segment': 'upload'}
+
+    html_template = loader.get_template('home/upload.html')
+    return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def pages(request):
