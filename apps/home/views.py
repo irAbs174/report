@@ -3,11 +3,15 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from django import template
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from .models import (OrderCodes, RequestCustomer)
+from django.shortcuts import render
 from django.template import loader
+from .forms import IMPORT_EXCEL
 from django.urls import reverse
+from django import template
+from tablib import Dataset
 
 
 #@login_required(login_url="/login/")
@@ -18,11 +22,24 @@ def index(request):
     return HttpResponse(html_template.render(context, request))
 
 @login_required
-def upload_excel_file(request):
-    context = {'segment': 'upload'}
-
-    html_template = loader.get_template('home/upload.html')
-    return HttpResponse(html_template.render(context, request))
+def import_excel(request):
+    context = {'status':''}
+    if request.method == 'POST':
+        excel_resource = IMPORT_EXCEL()
+        dataset = Dataset()
+        new_excel = request.FILES['myfile']
+        imported_data = dataset.load(new_excel.read(), format='xlsx')
+        for data in imported_data :
+            value = OrderCodes(
+                data[0],
+                data[1],
+                data[2],
+            )
+            value.save()
+        context['status'] = 'درون ریزی محصول با موفقیت انجام شد'
+    else:
+        context['status'] = 'درون ریزی فایل کد های رهگیری' 
+    return render(request, 'home/upload.html', context)
 
 @login_required(login_url="/login/")
 def pages(request):

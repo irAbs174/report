@@ -4,15 +4,6 @@
 <title>درون ریزی فایل اکسل</title>
 {% endblock %}
 {% block content %}
-{% if status %}
-<script>
-Swal.fire({
-              title: '{{ status }}',
-              showConfirmButton: false,
-              timer: 2500,
-            });
-</script>
-{% endif %}
 <div class="container-fluid cardexbody">
     <div class="container-fluid"><br>
         <div class="cardex" id="cardexprint">
@@ -23,7 +14,9 @@ Swal.fire({
                         <div class="col-md-6 col-xs-12">
                           <div class="x_panel">
                             <div class="x_title">
-                              <h2>درون ریزی از فایل اکسل کد های رهگیری</h2>           
+                                {% if status %}
+                                <h1>{{status}}</h1> 
+                                {% endif %}        
                               <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
