@@ -1,1 +1,42 @@
-<h1>HI</h1>
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block TITLE %}
+<title>درون ریزی فایل اکسل</title>
+{% endblock %}
+{% block content %}
+{% if status %}
+<script>
+Swal.fire({
+              title: '{{ status }}',
+              showConfirmButton: false,
+              timer: 2500,
+            });
+</script>
+{% endif %}
+<div class="container-fluid cardexbody">
+    <div class="container-fluid"><br>
+        <div class="cardex" id="cardexprint">
+            <div class="row g-3">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                          <div class="x_panel">
+                            <div class="x_title">
+                              <h2>درون ریزی از فایل اکسل کد های رهگیری</h2>           
+                              <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                              <div class="col-md-8 col-sm-12 col-xs-12 form-group">      
+                              </div>
+                                    <input type="file" name="myfile" class="form-control" placeholder="بارگزاری فایل درون ریزی" required>
+                                    <button class="btn btn-success" type="submit">بارگزاری فایل اکسل</button>   
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                  </form>
+            </div></div><dir></dir>
+{% block JS %}
+{% endblock %}
+{% endblock %}
