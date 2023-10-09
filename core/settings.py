@@ -18,7 +18,7 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 # load production server from .env
-ALLOWED_HOSTS = ['8000-irabs174-report-11z5hrlpuc8.ws-eu105.gitpod.io', 'localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
+ALLOWED_HOSTS = ['8002-irabs174-report-11z5hrlpuc8.ws-eu105.gitpod.io', 'localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
 
 # Application definition
 

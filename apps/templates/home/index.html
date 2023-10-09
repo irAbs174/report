@@ -52,7 +52,7 @@
                 </div>
               </div>
             </div>
-            <button type="button" class="btn btn-info">رهگیری سفارش</button>
+            <button type="button" class="btn btn-info" onclick="req()">رهگیری سفارش</button>
         </div>
       </div>
     </div>
@@ -66,5 +66,42 @@
 
 <!-- Specific JS goes HERE --> 
 {% block javascripts %}
-
+<script>
+  function req(){
+  let order_code = $(".order_code").val();
+  if (order_code){
+    $.ajax({
+      url : '/req',
+      type : 'POST',
+      data : {
+          'order_code': order_code,
+      },
+      success: function(response) {
+        if (response.success === false) {
+          Swal.fire({
+            icon: "info",
+            title: 'با احترام. کد رهگیری شما به دست ما نرسیده. درخواست شما جهت پیگیری سفارشتون ثبت شده و همکاران واحد پشتیبانی و خدمات پس از فروش در اسرع وقت با شما تماس خواهند گرفت',
+            showConfirmButton: false,
+            timer: 8000,
+          });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: `کد ۲۴ رقمی رهگیری مرسوله پستی شما برابر است با : ${response.tracking_number}`,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+        }
+      },
+  });// end ajax
+  }else{
+    Swal.fire({
+            icon: "error",
+            title: `لطفا کد سفارش خودتون رو وارد کنید`,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+  };// endif
+};// end fun
+</script>
 {% endblock javascripts %}

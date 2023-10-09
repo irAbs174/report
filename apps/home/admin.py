@@ -14,6 +14,7 @@ class OrderCodesAdmin(admin.ModelAdmin):
 
 class RequestCustomerAdmin(admin.ModelAdmin):
     list_display = ('orders_number', 'customer', 'status', )
+    list_filter = ('status',)
     search_fields = ('orders_number', 'customer', 'status', )
 
 

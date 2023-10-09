@@ -3,9 +3,10 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import (OrderCodes, RequestCustomer)
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.template import loader
 from .forms import IMPORT_EXCEL
@@ -66,3 +67,38 @@ def pages(request):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+@csrf_exempt
+def req(request):
+    order_code = request.POST.get('order_code')
+    order = OrderCodes.objects.filter(orders_number = order_code)
+    if order:
+        # Create a loop for retrive data from database
+        for data in order:
+            customer = data.customer
+            tracking_number = data.tracking_number
+        # Create request objects
+        RequestCustomer.objects.create(
+            orders_number = order_code,
+            customer = customer,
+            status = 'موفق',
+        )
+        # return response
+        return JsonResponse({
+            'status': 'موفقیت آمیز',
+            'customer': customer,
+            'tracking_number': tracking_number,
+            'success': True,
+        })
+    else:
+        # Create request objects
+        RequestCustomer.objects.create(
+            orders_number = order_code,
+            customer = 'درخواست دهنده',
+            status = 'ناموفق',
+        )
+        # return response
+        return JsonResponse({
+            'status': 'ناموفق',
+            'success': False,
+        })
