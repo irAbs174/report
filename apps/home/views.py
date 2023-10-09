@@ -34,6 +34,7 @@ def import_excel(request):
                 data[0],
                 data[1],
                 data[2],
+                data[3],
             )
             value.save()
         context['status'] = 'درون ریزی محصول با موفقیت انجام شد'

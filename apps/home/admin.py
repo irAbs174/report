@@ -8,15 +8,13 @@ from .models import (OrderCodes, RequestCustomer)
 
 
 class OrderCodesAdmin(admin.ModelAdmin):
-    list_display = ()
-    list_filter = ()
-    search_fields = ()
+    list_display = ('orders_number', 'tracking_number', 'customer', )
+    search_fields = ('orders_number', 'tracking_number', 'customer', )
 
 
 class RequestCustomerAdmin(admin.ModelAdmin):
-    list_display = ()
-    list_filter = ()
-    search_fields = ()
+    list_display = ('orders_number', 'customer', 'status', )
+    search_fields = ('orders_number', 'customer', 'status', )
 
 
 
