@@ -5,14 +5,16 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import (OrderCodes, RequestCustomer)
 from django.views.decorators.csrf import csrf_exempt
+from .models import (OrderCodes, RequestCustomer)
+from core.settings import (SMS_API, WC_API)
 from django.shortcuts import render
 from django.template import loader
 from .forms import IMPORT_EXCEL
 from django.urls import reverse
 from django import template
 from tablib import Dataset
+from kavenegar import *
 
 
 #@login_required(login_url="/login/")
@@ -22,8 +24,60 @@ def index(request):
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
-@login_required
+@csrf_exempt
 def import_excel(request):
+    if request.method == 'POST':
+        order_code = request.POST.get('order_code')
+        tracking_number = request.POST.get('tracking_number')
+        customer = request.POST.get('customer')
+        phone_number = request.POST.get('phone_number')
+        if order_code != '':
+            if tracking_number != '':
+                if customer != '':
+                    if phone_number != '':
+                        # SMS SEND TO CUSTOMER
+                        try:
+                            api = KavenegarAPI(SMS_API)
+                            params = {
+                                'receptor': phone_number,
+                                'template': 'kif123Report',
+                                'token': tracking_number,
+                                'type': 'sms',
+                            }   
+                            response = api.verify_lookup(params)
+                            print(response)
+                        except APIException as e: 
+                            print(e)
+                        except HTTPException as e: 
+                            print(e)
+                        # DB => Restore detail on database
+                        OrderCodes.objects.create(
+                            orders_number=order_code,
+                            tracking_number=tracking_number,
+                            phone_number=phone_number,
+                            customer=customer,
+                        )
+                        return JsonResponse({'status': 'کد رهگیری با موفقیت افزوده شد', 'success': True})
+                    else:
+                        # phone number empty
+                        return JsonResponse({'status': 'شماره تماس را وارد کنید', 'success': False})
+                else:
+                    # customer empty
+                    return JsonResponse({'status': 'نام مشتری را وارد کنید', 'success': False})
+            else:
+                # tracking_number empty
+                return JsonResponse({'status': 'شماره رهگیری مرسوله پستی را وارد کنید', 'success': False})
+        else:
+            # order_code empty
+            return JsonResponse({'status': 'شماره سفارش را وارد کنید', 'success': False})
+    else:
+        # Bad request
+        return JsonResponse({'status': 'درخواست ارسال شده معتبر نمی باشد', 'success': False})
+        
+@login_required
+def load_upload_page(request):
+    return render(request, 'home/upload.html')
+    '''
     context = {'status':''}
     if request.method == 'POST':
         excel_resource = IMPORT_EXCEL()
@@ -42,6 +96,7 @@ def import_excel(request):
     else:
         context['status'] = 'درون ریزی فایل کد های رهگیری' 
     return render(request, 'home/upload.html', context)
+    '''
 
 @login_required(login_url="/login/")
 def pages(request):
@@ -91,6 +146,7 @@ def req(request):
             'success': True,
         })
     else:
+        # AAAAAAAAAAAAAAAAAAAAAAAAAA
         # Create request objects
         RequestCustomer.objects.create(
             orders_number = order_code,

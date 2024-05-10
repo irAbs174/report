@@ -1,35 +1,121 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
-{% block TITLE %}
-<title>درون ریزی فایل اکسل</title>
-{% endblock %}
+
+{% block stylesheets %}
+
+<style>
+  .center-div {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+</style>
+
+{% endblock stylesheets %}
+
 {% block content %}
-<div class="container-fluid cardexbody">
-    <div class="container-fluid"><br>
-        <div class="cardex" id="cardexprint">
-            <div class="row g-3">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6 col-xs-12">
-                          <div class="x_panel">
-                            <div class="x_title">
-                                {% if status %}
-                                <h1>{{status}}</h1> 
-                                {% endif %}        
-                              <div class="clearfix"></div>
-                            </div>
-                            <div class="x_content">
-                              <div class="col-md-8 col-sm-12 col-xs-12 form-group">      
-                              </div>
-                                    <input type="file" name="myfile" class="form-control" placeholder="بارگزاری فایل درون ریزی" required>
-                                    <button class="btn btn-success" type="submit">بارگزاری فایل اکسل</button>   
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                  </form>
-            </div></div><dir></dir>
-{% block JS %}
-{% endblock %}
-{% endblock %}
+
+<div class="header pb-6 d-flex align-items-center"
+  style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+  <!-- Mask -->
+  <span class="mask bg-gradient-default opacity-8"></span>
+  <!-- Header container -->
+  <div class="container-fluid d-flex align-items-center">
+    <div class="row">
+
+    </div>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-8 order-xl-1">
+      <div class="col-lg-7 col-md-10 center-div">
+        <h1 class="text-white">فروشگاه ۱۲۳ کیف</h1>
+        <p class="text-white mt-0 mb-5">افزودن کد رهگیری</p>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h6 class="center-div heading-small text-muted mb-4">برای رهگیری نیاز است کد سفارش + شماره تماس خود را وارد
+            کنید</h6>
+          <div class="pl-lg-4">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-username">کد سفارش به انگلیسی</label>
+                  <input type="number" id="input-username" class="form-control order_code"
+                    placeholder="کد سفارش ۵ رقمی .. مانند 84333" value="">
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label" for="input-username">نام کامل مشتری</label>
+                  <input id="input-username" class="form-control customer" value="">
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label" for="input-username">شماره رهگیری مرسوله پستی</label>
+                  <input id="input-username" class="form-control tracking_number" value="">
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label" for="input-username">شماره تماس مشتری</label>
+                  <input id="input-username" class="form-control phone_number" value="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-info" onclick="req()">افزودن کد رهگیری</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "includes/footer.html" %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+<script>
+  function req() {
+    let order_code = $(".order_code").val();
+    let tracking_number = $(".tracking_number").val();
+    let customer = $(".customer").val();
+    let phone_number = $(".phone_number").val();
+    if (order_code) {
+      $.ajax({
+        url: '/upload',
+        type: 'POST',
+        data: {
+          'order_code': order_code,
+          'tracking_number': tracking_number,
+          'customer': customer,
+          'phone_number': phone_number,
+        },
+        success: function (response) {
+          if (response.success === false) {
+            Swal.fire({
+              icon: "info",
+              title: response.status,
+              showConfirmButton: false,
+              timer: 18000,
+            });
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: response.status,
+              showConfirmButton: false,
+              timer: 10000,
+            });
+          }
+        },
+      });// end ajax
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: `لطفا کد سفارش خودتان را وارد نمایید`,
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    };// endif
+  };// end fun
+</script>
+{% endblock javascripts %}

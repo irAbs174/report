@@ -1,0 +1,24 @@
+server {
+    listen 80;
+    server_name report.123kif.ir;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        alias /var/www/public/report/static/;
+        expires max;
+        access_log        off;
+        log_not_found     off;
+    }
+    location /media {
+        alias /var/www/public/report/media/;
+        expires max;
+    }
+    location ~ \.py$ {
+        return 403;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://0.0.0.0:8088;
+    }
+}

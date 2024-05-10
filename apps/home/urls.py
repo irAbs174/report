@@ -9,6 +9,7 @@ from apps.home import views
 urlpatterns = [
 
     # The home page
+    path('upload_code', views.load_upload_page, name='upload_code'),
     path('upload', views.import_excel, name='upload'),
     path('', views.index, name='home'),
     path('req', views.req, name='req'),

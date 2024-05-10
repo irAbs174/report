@@ -14,8 +14,8 @@
 
 {% block content %}
 
-<div class="header pb-6 d-flex align-items-center" 
-     style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+<div class="header pb-6 d-flex align-items-center"
+  style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
   <!-- Mask -->
   <span class="mask bg-gradient-default opacity-8"></span>
   <!-- Header container -->
@@ -35,24 +35,20 @@
       </div>
       <div class="card">
         <div class="card-body">
-            <h6 class="center-div heading-small text-muted mb-4">برای رهگیری نیاز است کد سفارش + شماره تماس خود را وارد کنید</h6>
-            <div class="pl-lg-4">
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-username">کد سفارش</label>
-                    <input type="text" id="input-username" class="form-control order_code" placeholder="کد سفارش ۵ رقمی .. مانند 84333" value="">
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label" for="input-email">شماره تماس</label>
-                    <input type="text" id="input-email" class="form-control" placeholder="شماره تماسی که با آن سفارش خود را ثبت کردید مانند ۰۹۱۲۹۵۸۵۷۱۴">
-                  </div>
+          <h6 class="center-div heading-small text-muted mb-4">برای رهگیری نیاز است کد سفارش خود را وارد
+            کنید</h6>
+          <div class="pl-lg-4">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input-username">کد سفارش به انگلیسی</label>
+                  <input type="number" id="input-username" class="form-control order_code"
+                    placeholder="کد سفارش .. مانند 8454333" value="">
                 </div>
               </div>
             </div>
-            <button type="button" class="btn btn-info" onclick="req()">رهگیری سفارش</button>
+          </div>
+          <button type="button" class="btn btn-info" onclick="req()">رهگیری سفارش</button>
         </div>
       </div>
     </div>
@@ -64,44 +60,44 @@
 
 {% endblock content %}
 
-<!-- Specific JS goes HERE --> 
+<!-- Specific JS goes HERE -->
 {% block javascripts %}
 <script>
-  function req(){
-  let order_code = $(".order_code").val();
-  if (order_code){
-    $.ajax({
-      url : '/req',
-      type : 'POST',
-      data : {
+  function req() {
+    let order_code = $(".order_code").val();
+    if (order_code) {
+      $.ajax({
+        url: '/req',
+        type: 'POST',
+        data: {
           'order_code': order_code,
-      },
-      success: function(response) {
-        if (response.success === false) {
-          Swal.fire({
-            icon: "info",
-            title: 'چهل هشت الی ۷۲ ساعت پس از ثبت سفارش کد پستی خود را از اینجا دریافت کنید',
-            showConfirmButton: false,
-            timer: 18000,
-          });
-        } else {
-          Swal.fire({
-            icon: "success",
-            title: `کد ۲۴ رقمی رهگیری مرسوله پستی شما برابر است با : ${response.tracking_number}`,
-            showConfirmButton: false,
-            timer: 10000,
-          });
-        }
-      },
-  });// end ajax
-  }else{
-    Swal.fire({
-            icon: "error",
-            title: `لطفا کد سفارش خودتون رو وارد کنید`,
-            showConfirmButton: false,
-            timer: 1000,
-          });
-  };// endif
-};// end fun
+        },
+        success: function (response) {
+          if (response.success === false) {
+            Swal.fire({
+              icon: "info",
+              title: 'لطفا۴۸ الی ۷۲ ساعت پس از ثبت سفارش اقدام به دریافت کد رهگیری مرسوله پستی خود از طریق این پنل نمایید',
+              showConfirmButton: false,
+              timer: 18000,
+            });
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: `کد ۲۴ رقمی رهگیری مرسوله پستی شما برابر است با : ${response.tracking_number}`,
+              showConfirmButton: false,
+              timer: 10000,
+            });
+          }
+        },
+      });// end ajax
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: `لطفا کد سفارش خودتان را وارد نمایید`,
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    };// endif
+  };// end fun
 </script>
 {% endblock javascripts %}
