@@ -140,21 +140,99 @@ def req(request):
         )
         # return response
         return JsonResponse({
-            'status': 'موفقیت آمیز',
+            'status': '200',
             'customer': customer,
             'tracking_number': tracking_number,
             'success': True,
         })
     else:
-        # AAAAAAAAAAAAAAAAAAAAAAAAAA
-        # Create request objects
-        RequestCustomer.objects.create(
-            orders_number = order_code,
-            customer = 'درخواست دهنده',
-            status = 'ناموفق',
-        )
-        # return response
-        return JsonResponse({
-            'status': 'ناموفق',
-            'success': False,
-        })
+        data = WC_API.get(f'orders/{order_code}').json()
+        print(data)
+        if data['status'] == 'completed':
+            context = {
+                'phone' : data['billing']['phone'],
+                'first_name' : data['shipping']['first_name'],
+                'last_name' : data['shipping']['last_name'],
+                'shipping_method' : data['shipping_lines'][0]['method_title'],
+                'shipping_total' : data['shipping_lines'][0]['total'],
+                'total' : data['total'],
+                'melli_code' : data['billing']['billing_melly_code'],
+                'city' : data['shipping']['city'],
+                'postcode' : data['shipping']['postcode'],
+                'payment_method_title' : data['payment_method_title'],
+                'customer_note' : data['customer_note'],
+                'status': data['status'],
+            }
+
+            cart = []
+            # set cart items
+            for i in data['line_items']:
+                cart_item = {
+                    'id': i['id'],
+                    'name': i['name'],
+                    'image': i['image']['src'],
+                    'quantity': i['quantity'],
+                }
+                cart.append(cart_item)
+
+
+            context['cart'] = cart
+
+            RequestCustomer.objects.create(
+                orders_number = order_code,
+                customer = context['first_name'] +' '+ context['last_name'],
+                status = 'تکمیل شده -> رهگیری تولید نشده',
+            )
+
+            return JsonResponse({
+                'status': '1001',
+                'context': context,
+                'success': True,
+            })
+        elif data['status'] == 'processing':
+            context = {
+                'phone' : data['billing']['phone'],
+                'first_name' : data['shipping']['first_name'],
+                'last_name' : data['shipping']['last_name'],
+                'shipping_method' : data['shipping_lines'][0]['method_title'],
+                'shipping_total' : data['shipping_lines'][0]['total'],
+                'total' : data['total'],
+                'melli_code' : data['billing']['billing_melly_code'],
+                'city' : data['shipping']['city'],
+                'postcode' : data['shipping']['postcode'],
+                'payment_method_title' : data['payment_method_title'],
+                'customer_note' : data['customer_note'],
+                'status': data['status'],
+            }
+
+            cart = []
+            # set cart items
+            for i in data['line_items']:
+                cart_item = {
+                    'id': i['id'],
+                    'name': i['name'],
+                    'image': i['image']['src'],
+                    'quantity': i['quantity'],
+                }
+                cart.append(cart_item)
+
+
+            context['cart'] = cart
+
+            RequestCustomer.objects.create(
+                orders_number = order_code,
+                customer = context['first_name'] +' '+ context['last_name'],
+                status = 'در حال انجام',
+            )
+
+            return JsonResponse({
+                'status': '1000',
+                'context': context,
+                'success': True,
+            })
+        else:
+            # return response
+            return JsonResponse({
+                'status': 'ناموفق',
+                'success': False,
+            })

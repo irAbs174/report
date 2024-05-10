@@ -121,5 +121,11 @@ STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'apps/static'),
 )
 
-SMS_API = 'REPLACE_WITH_YOUR'
+SMS_API = 'YOUR_SEC_KEY'
 
+WC_API = API(
+    url="YOUR_SEC_KEY",
+    consumer_key="YOUR_SEC_KEY",
+    consumer_secret="YOUR_SEC_KEY",
+    version="wc/v3"
+)

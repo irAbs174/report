@@ -33,7 +33,7 @@
         <h1 class="text-white">فروشگاه ۱۲۳ کیف</h1>
         <p class="text-white mt-0 mb-5">به سامانه رهگیری سفارشات خوش آمدید</p>
       </div>
-      <div class="card">
+      <div class="card report_main">
         <div class="card-body">
           <h6 class="center-div heading-small text-muted mb-4">برای رهگیری نیاز است کد سفارش خود را وارد
             کنید</h6>
@@ -81,13 +81,161 @@
               timer: 18000,
             });
           } else {
-            Swal.fire({
+            if(response.success == '200'){
+              Swal.fire({
               icon: "success",
-              title: `کد ۲۴ رقمی رهگیری مرسوله پستی شما برابر است با : ${response.tracking_number}`,
-              showConfirmButton: false,
-              timer: 10000,
+              title: `کد رهگیری مرسوله شما برابر است با : ${response.tracking_number}`,
+              showConfirmButton: true,
+              confirmButtonText: 'تایید', 
             });
-          }
+            }else if(response.status == '1000'){
+              $('.report_main').html(`
+              <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+  <h2 class="text-center mb-3">
+    <span class="text-body-secondary">${response.context.first_name} ${response.context.last_name}</span>
+  </h2>
+  <div class="row justify-content-end">
+    <div class="col text-right">
+      <ul>
+        </li>شهر: ${response.context.city}</li>
+        </ul>
+              <ul>
+        </li>روش پرداخت: ${response.context.payment_method_title}</li>
+        </ul>
+        <ul>
+                </li>روش ارسال: ${response.context.shipping_method}</li>
+        </ul>
+                <ul>
+        </li>هرینه حمل و نقل: ${response.context.shipping_total} تومان</li>
+          </ul>
+        <ul>
+        </li>مجموع فاکتور: ${response.context.total} تومان</li>
+          </ul>
+    </div>
+  </div>
+</div>
+                  <div class="card-header border-0">
+            <h4 class="mb-0 text-right">محصولات</h4>
+          </div>
+          <!-- Light table -->
+          <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" class="sort" data-sort="name">محصول</th>
+                  <th scope="col" class="sort" data-sort="budget">تعداد</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody class="list report_main_table">
+                 </tbody>
+                          </table>
+          </div>
+`)
+  for (let i = 0; i <= response.context.cart.length; i++){
+    $('.report_main_table').append(`
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src=${response.context.cart[i].image}>
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">${response.context.cart[i].name}</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    ${response.context.cart[i].quantity}
+                  </td>
+    `);
+    $(`.report_main_table`).append(`
+    <div class="card-header border-0">
+            <h4 class="mb-0 text-right">وضعیت سفارش</h4>
+            <hr>
+            <h3 class="mb-0 text-right">سفارش شما در حال انجام است. کد رهگیری مرسوله شما پس از گذشت ۲ تا ۳ روز از ثبت سفارش برای شما پیامک میشود همچنین از طریق این پنل نیز قابل دریافت است</h3>
+          </div>
+    `)
+  }//endfor
+
+            }else if(response.status == '1001'){
+              $('.report_main').html(`
+              <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+  <h2 class="text-center mb-3">
+    <span class="text-body-secondary">${response.context.first_name} ${response.context.last_name}</span>
+  </h2>
+  <div class="row justify-content-end">
+    <div class="col text-right">
+      <ul>
+        </li>شهر: ${response.context.city}</li>
+        </ul>
+              <ul>
+        </li>روش پرداخت: ${response.context.payment_method_title}</li>
+        </ul>
+        <ul>
+                </li>روش ارسال: ${response.context.shipping_method}</li>
+        </ul>
+                <ul>
+        </li>هرینه حمل و نقل: ${response.context.shipping_total} تومان</li>
+          </ul>
+        <ul>
+        </li>مجموع فاکتور: ${response.context.total} تومان</li>
+          </ul>
+    </div>
+  </div>
+</div>
+                  <div class="card-header border-0">
+            <h4 class="mb-0 text-right">محصولات</h4>
+          </div>
+          <!-- Light table -->
+          <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" class="sort" data-sort="name">محصول</th>
+                  <th scope="col" class="sort" data-sort="budget">تعداد</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody class="list report_main_table">
+                 </tbody>
+                          </table>
+          </div>
+`)
+  for (let i = 0; i <= response.context.cart.length; i++){
+    $('.report_main_table').append(`
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src=${response.context.cart[i].image}>
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">${response.context.cart[i].name}</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    ${response.context.cart[i].quantity}
+                  </td>
+    `);
+    $(`.report_main_table`).append(`
+    <div class="card-header border-0">
+            <h4 class="mb-0 text-right">وضعیت سفارش</h4>
+            <hr>
+            <h3 class="mb-0 text-right">ارسال از انبار های ۱۲۳ کیف انجام شده. کد رهگیری مرسوله به ۱۲۳ کیف داده نشده-> تاخیر پست در ارایه بارکد</h3>
+          </div>
+    `)
+  }//endfor
+            }else{
+              Swal.fire({
+              icon: "info",
+              title: 'لطفا۴۸ الی ۷۲ ساعت پس از ثبت سفارش اقدام به دریافت کد رهگیری مرسوله پستی خود از طریق این پنل نمایید',
+              showConfirmButton: true,
+              confirmButtonText: 'تایید', 
+            });
+            };//endif
+          }//endif
         },
       });// end ajax
     } else {
