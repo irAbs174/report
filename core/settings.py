@@ -124,8 +124,8 @@ STATICFILES_DIRS = (
 SMS_API = 'YOUR_SEC_KEY'
 
 WC_API = API(
-    url="YOUR_SEC_KEY",
-    consumer_key="YOUR_SEC_KEY",
-    consumer_secret="YOUR_SEC_KEY",
+    url="https://123kif.com",
+    consumer_key="ck_1bceb9fb8193086220e30d369dca55248f89e4f9",
+    consumer_secret="cs_13356ff3600db214712700c8703268efc6c6362d",
     version="wc/v3"
 )
